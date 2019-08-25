@@ -1,0 +1,18 @@
+{
+	project "sad"
+
+	version "0.1"
+
+	desc "A super simple data storage file format"
+
+	author {
+		first-name "Qijian"
+		last-name "Zhang"
+		email [
+			"qijian.zhang@qq.com"
+			"qijian.zhang@outlook.com"
+		]
+	}
+
+	license "GPL-3.0"
+}

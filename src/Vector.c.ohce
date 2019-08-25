@@ -1,0 +1,203 @@
+#include "$Vector$.h"
+#include <string.h>
+
+$inc$
+
+struct _ADT_$Vector$ {
+	size_t capacity, length;
+	$T$ *data;
+};
+
+static inline void $Vector$_realloc($Vector$ self);
+
+$Vector$ $Vector$_newWithCapacity(size_t capacity)
+{
+	$Vector$ self = malloc(sizeof(*self));
+	self->capacity = capacity == 0 ? 1 : capacity;
+	self->length = 0;
+	self->data = malloc(sizeof($T$) * self->capacity);
+	return self;
+}
+
+$Vector$ $Vector$_newFromArray(const $T$ *array, size_t length)
+{
+	$Vector$ self = $Vector$_newWithCapacity(length);
+	memcpy(self->data, array, sizeof($T$) * length);
+	self->length = length;
+	return self;
+}
+
+$Vector$ $Vector$_clone($Vector$ src)
+{
+	$Vector$ dst = malloc(sizeof(*dst));
+	dst->length = dst->capacity = src->length;
+	dst->data = malloc(sizeof($T$) * dst->length);
+	for (size_t i = 0; i < dst->length; i++) {
+		dst->data[i] = src->data[i];
+	}
+	return dst;
+}
+
+void $Vector$_dump($Vector$ self, $T$ *buffer)
+{
+	memcpy(buffer, self->data, sizeof($T$) * self->length);
+}
+
+void $Vector$_dumpn($Vector$ self, $T$ *buffer, size_t n)
+{
+	n = self->length < n ? self->length : n;
+	memcpy(buffer, self->data, sizeof($T$) * n);
+}
+
+void $Vector$_free($Vector$ self)
+{
+	if (self) {
+		free(self->data);
+		free(self);
+	}
+}
+
+bool $Vector$_empty($Vector$ self)
+{
+	return self->length == 0;
+}
+
+size_t $Vector$_getLength($Vector$ self)
+{
+	return self->length;
+}
+
+void $Vector$_clear($Vector$ self)
+{
+	self->length = 0;
+}
+
+void $Vector$_eraseTail($Vector$ self, size_t count)
+{
+	self->length -= count > self->length ? self->length : count;
+}
+
+size_t $Vector$_getCapacity($Vector$ self)
+{
+	return self->capacity;
+}
+
+void $Vector$_setCapacity($Vector$ self, size_t capacity)
+{
+	if (self->capacity == capacity)
+		return;
+	self->capacity = capacity == 0 ? 1 : capacity;
+	$Vector$_realloc(self);
+}
+
+void $Vector$_shrink($Vector$ self)
+{
+	$Vector$_setCapacity(self, self->length);
+}
+
+void $Vector$_set($Vector$ self, size_t index, $T$ value)
+{
+	self->data[index] = value;
+}
+
+$T$ $Vector$_get($Vector$ self, size_t index)
+{
+	return self->data[index];
+}
+
+size_t $Vector$_insert($Vector$ self, size_t index, $T$ value)
+{
+	if (index >= self->length)
+		return self->length;
+	$Vector$_push(self, value);
+	size_t i = self->length - 1;
+	while (i > index) {
+		self->data[i] = self->data[i - 1];
+		i -= 1;
+	}
+	self->data[i] = value;
+	return self->length;
+}
+
+$T$ *$Vector$_data($Vector$ self)
+{
+	return self->data;
+}
+
+size_t $Vector$_push($Vector$ self, $T$ value)
+{
+	if (self->length >= self->capacity) {
+		self->capacity *= 2;
+		$Vector$_realloc(self);
+	}
+	self->data[self->length] = value;
+	self->length += 1;
+	return self->length;
+}
+
+$T$ $Vector$_pop($Vector$ self)
+{
+	self->length -= 1;
+	return self->data[self->length];
+}
+
+size_t $Vector$_append($Vector$ self, $Vector$ vec)
+{
+	if (self->length + vec->length > self->capacity) {
+		self->capacity += vec->length;
+		$Vector$_realloc(self);
+	}
+	memcpy(self->data + self->length, vec->data, sizeof($T$) * vec->length);
+	self->length += vec->length;
+	return self->length;
+}
+
+size_t $Vector$_appendArray($Vector$ self, const $T$ *a, size_t count)
+{
+	if (a == NULL || count == 0) {
+		return self->length;
+	}
+	if (self->length + count > self->capacity) {
+		self->capacity += count;
+		$Vector$_realloc(self);
+	}
+	memcpy(self->data + self->length, a, sizeof($T$) * count);
+	self->length += count;
+	return self->length;
+}
+
+void $Vector$_copy($Vector$ self, $Vector$ src)
+{
+	$Vector$_copyn(self, src, src->length);
+}
+
+void $Vector$_copyn($Vector$ self, $Vector$ src, size_t n)
+{
+	if (self == src)
+		return;
+
+	if (src->length == 0 || n == 0) {
+		self->length = 0;
+		return;
+	}
+
+	n = src->length < n ? src->length : n;
+	if (self->capacity < n) {
+		free(self->data);
+		self->data = malloc(sizeof($T$) * n);
+	}
+	memcpy(self->data, src->data, sizeof($T$) * n);
+	self->length = n;
+}
+
+static inline void $Vector$_realloc($Vector$ self)
+{
+	$T$ *tmp = malloc(sizeof($T$) * self->capacity);
+	if (self->length > self->capacity) {
+		self->length = self->capacity;
+	}
+	memcpy(tmp, self->data, sizeof($T$) * self->length);
+	free(self->data);
+	self->data = tmp;
+}
+
