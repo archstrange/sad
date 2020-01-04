@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "../src/sad.h"
+#include "../src/read.h"
+#include "../src/write.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,14 +16,17 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	struct Sad sad = Sad_fromFILE(fp);
-	if (sad.type == SAD_UNKNOWN_VALUE_TYPE) {
+	struct Sad sad = Sad_readFile(fp);
+
+	fclose(fp);
+
+	if (sad.type == SAD_INVALID) {
 		fprintf(stderr, "%s is a bad format sad file\n", argv[1]);
 		return 1;
 	}
 
 	Str str = Str_newWithCapacity(0);
-	Sad_toStr(&sad, str);
+	Sad_writeToStr(sad, str, true);
 
 	size_t len = Str_getLength(str);
 	if (len == 0) {
@@ -29,13 +34,9 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	unsigned char cstr[len + 1];
-	Str_dump(str, cstr);
-	cstr[len] = 0;
-	printf("%s\n", cstr);
+	Str_echo(str, stdout);
 
 	Str_free(str);
-	Sad_destroy(&sad);
-	fclose(fp);
+	Sad_free(sad);
 	return 0;
 }
