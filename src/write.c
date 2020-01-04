@@ -97,7 +97,7 @@ static inline void Sad_writeValue(struct Sad v, Str dst, int64_t indent)
 {
 	switch (v.type) {
 	case SAD_STRING:
-		Sad_writeString(dst, v.str);
+		Sad_writeString(v.str, dst);
 		break;
 	case SAD_ARRAY:
 		Sad_writeArray(v.array, dst, indent);

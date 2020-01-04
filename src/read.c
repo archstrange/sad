@@ -29,7 +29,8 @@ static SadArray Sad_readArray(SL *self);
 struct Sad Sad_readFile(FILE *fp)
 {
 	SL sl = {
-		.ls = LS_newFileSource(fp, false, true, NULL, NULL)
+		.ls = LS_newFileSource(fp, false, true, NULL, NULL),
+		.token = Str_new(),
 	};
 	if (sl.ls == NULL) return SAD_DEFAULT_VALUE();
 	return Sad_read(&sl);
@@ -38,7 +39,8 @@ struct Sad Sad_readFile(FILE *fp)
 struct Sad Sad_readStr(Str str)
 {
 	SL sl = {
-		.ls = LS_newStrSource(str, false)
+		.ls = LS_newStrSource(str, false),
+		.token = Str_new(),
 	};
 	if (sl.ls == NULL) return SAD_DEFAULT_VALUE();
 	return Sad_read(&sl);
@@ -47,7 +49,8 @@ struct Sad Sad_readStr(Str str)
 struct Sad Sad_readCStr(const char *cstr)
 {
 	SL sl = {
-		.ls = LS_newCStrSource(cstr, false)
+		.ls = LS_newCStrSource(cstr, false),
+		.token = Str_new(),
 	};
 	if (sl.ls == NULL) return SAD_DEFAULT_VALUE();
 	return Sad_read(&sl);
