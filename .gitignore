@@ -1,4 +1,6 @@
 build
-src/SadArray.*
-src/SadDict.*
+src/SadArray.h
+src/SadArray.c
+src/SadDict.h
+src/SadDict.c
 *.swp

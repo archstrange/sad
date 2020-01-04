@@ -1,0 +1,24 @@
+{
+    Dict 'SadDict'
+
+    h_include '#include <cutils/Str.h>
+#include <cutils/Vector/StrVector.h>
+#include "SadArray.h"
+
+struct Sad;'
+    c_include '#include "sad.h"'
+
+    K 'Str'
+    K_new 'Str_new'
+    K_clone 'Str_clone'
+    K_copy 'Str_copy'
+    K_free 'Str_free'
+    K_equal 'Str_equal'
+    K_hash 'Str_hash'
+    KVector 'StrVector'
+
+    V 'struct Sad'
+    V_new 'SAD_DEFAULT_VALUE'
+    V_free 'Sad_free'
+    VVector 'SadArray'
+}

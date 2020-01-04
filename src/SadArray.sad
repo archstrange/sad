@@ -1,0 +1,14 @@
+{
+    Vector 'SadArray'
+
+    T 'struct Sad'
+    T_new 'SAD_DEFAULT_VALUE'
+    T_free 'Sad_free'
+
+    no_cmp 'yes'
+    no_equal 'yes'
+    no_hash 'yes'
+
+    h_include 'struct Sad;'
+    c_include '#include "sad.h"'
+}
