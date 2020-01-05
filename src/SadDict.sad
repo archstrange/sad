@@ -19,6 +19,8 @@ struct Sad;'
 
     V 'struct Sad'
     V_new 'SAD_DEFAULT_VALUE'
+    V_copy 'Sad_copy'
+    V_clone 'Sad_clone'
     V_free 'Sad_free'
     VVector 'SadArray'
 }

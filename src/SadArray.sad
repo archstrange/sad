@@ -3,6 +3,8 @@
 
     T 'struct Sad'
     T_new 'SAD_DEFAULT_VALUE'
+    T_copy 'Sad_copy'
+    T_clone 'Sad_clone'
     T_free 'Sad_free'
 
     no_cmp 'yes'
