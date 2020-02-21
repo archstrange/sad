@@ -43,6 +43,69 @@ static inline struct Sad Sad_clone(struct Sad src);
 static inline void Sad_copy(struct Sad self, struct Sad src);
 static inline void Sad_free(struct Sad self);
 
+/// Generic Dict insert macro func
+/// @value type:
+///   - use copy:
+///     - Str *
+///     - SadArray *
+///     - SadDict *
+///   - use assign:
+///     - Str
+///     - SadArray
+///     - SadDict
+#define SadDict_insertValue(sd, key, value) \
+	__SadDict_insertg(sd, key, \
+			 _Generic(value, \
+				  Str: SAD_STRING, \
+				  SadArray: SAD_ARRAY, \
+				  SadDict: SAD_DICT, \
+				  Str *: -SAD_STRING, \
+				  SadArray *: -SAD_ARRAY, \
+				  SadDict *: -SAD_DICT), \
+			 value)
+
+/// Generic Array set macro func
+/// @value type:
+///   - use copy:
+///     - Str *
+///     - SadArray *
+///     - SadDict *
+///   - use assign:
+///     - Str
+///     - SadArray
+///     - SadDict
+#define SadArray_setValue(sa, index, value) \
+	__SadArray_setg(sa, index, \
+			 _Generic(value, \
+				  Str: SAD_STRING, \
+				  SadArray: SAD_ARRAY, \
+				  SadDict: SAD_DICT, \
+				  Str *: -SAD_STRING, \
+				  SadArray *: -SAD_ARRAY, \
+				  SadDict *: -SAD_DICT), \
+			 value)
+
+/// Generic Array push macro func
+/// @value type:
+///   - use copy:
+///     - Str *
+///     - SadArray *
+///     - SadDict *
+///   - use assign:
+///     - Str
+///     - SadArray
+///     - SadDict
+#define SadArray_pushValue(sa, value) \
+	__SadArray_pushg(sa, \
+			 _Generic(value, \
+				  Str: SAD_STRING, \
+				  SadArray: SAD_ARRAY, \
+				  SadDict: SAD_DICT, \
+				  Str *: -SAD_STRING, \
+				  SadArray *: -SAD_ARRAY, \
+				  SadDict *: -SAD_DICT), \
+			 value)
+
 ///////////////////////////////////////////////////////////////////////////////
 // inline methods impl
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,6 +181,63 @@ static inline void Sad_free(struct Sad self)
 		break;
 	}
 	self.type = SAD_INVALID;
+}
+
+#define __gSad(type, ptr) \
+	struct Sad sad = { 0 }; \
+	switch (sad.type = type) { \
+	case SAD_STRING: \
+	case SAD_ARRAY: \
+	case SAD_DICT: \
+		sad.dict = ptr; \
+		break; \
+	case -SAD_STRING: \
+	case -SAD_ARRAY: \
+	case -SAD_DICT: \
+		sad.dict = *((SadDict *)ptr); \
+		break; \
+	}
+
+static inline void __SadDict_insertg(SadDict sd,
+				     Str key,
+				     int type,
+				     void *ptr)
+{
+	__gSad(type, ptr);
+
+	if (type < 0) { // use copy
+		sad.type = -type;
+		SadDict_insert(sd, key, &sad);
+	} else {
+		SadDict_insert(sd, key, sad);
+	}
+}
+
+static inline void __SadArray_setg(SadArray sa,
+				   uint64_t index,
+				   int type,
+				   void *ptr)
+{
+	__gSad(type, ptr);
+
+	if (type < 0) { // use copy
+		sad.type = -type;
+		SadArray_set(sa, index, &sad);
+	} else {
+		SadArray_set(sa, index, sad);
+	}
+}
+
+static inline size_t __SadArray_pushg(SadArray sa, int type, void *ptr)
+{
+	__gSad(type, ptr);
+
+	if (type < 0) { // use copy
+		sad.type = -type;
+		return SadArray_push(sa, &sad);
+	} else {
+		return SadArray_push(sa, sad);
+	}
 }
 
 #endif

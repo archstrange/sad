@@ -18,6 +18,26 @@
 #include "../src/read.h"
 #include "../src/write.h"
 
+void generic_funcs_test()
+{
+	SadDict sd = SadDict_new();
+	SadArray sa = SadArray_new();
+	Str key = Str_newFromCStr("key");
+	SadDict_insertValue(sd, key, &key);
+	SadDict_insertValue(sd, key, &sa);
+	SadDict_insertValue(sd, key, Str_new());
+	SadDict_insertValue(sd, key, SadArray_new());
+	SadDict_insertValue(sd, key, SadDict_new());
+
+	SadArray_pushValue(sa, &key);
+	SadArray_pushValue(sa, Str_new());
+	SadArray_pushValue(sa, SadArray_new());
+	SadArray_pushValue(sa, SadDict_new());
+	SadArray_setValue(sa, 0, Str_new());
+	SadArray_setValue(sa, 1, SadArray_new());
+	SadArray_setValue(sa, 2, SadDict_new());
+}
+
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
