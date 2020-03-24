@@ -44,7 +44,7 @@ static SadArray Sad_readArray(SL *self);
 struct Sad Sad_readFile(FILE *fp)
 {
 	SL sl = {
-		.ls = LS_newFileSource(fp, false, true, NULL, NULL),
+		.ls = LS_newFileSource(fp, false, false, NULL, NULL),
 		.token = Str_new(),
 	};
 	if (sl.ls == NULL) return SAD_DEFAULT_VALUE();
