@@ -25,6 +25,7 @@ static inline void Sad_writeToFile(struct Sad sad, FILE *fp, bool pretty)
 	Str str = Str_new();
 	Sad_writeToStr(sad, str, pretty);
 	Str_print(str, fp);
+	Str_free(str);
 }
 
 
