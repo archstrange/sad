@@ -1,0 +1,6 @@
+{
+	project 'sad'
+	author 'Arch Strange'
+	email 'arch.strange@foxmail.com'
+	brief 'a simple data(String, Array, Dict) file format'
+}
