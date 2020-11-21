@@ -1,7 +1,0 @@
-#!/bin/bash
-
-ohce ../cutils/src/Vector/Vector.h.ohce src/SadArray.sad src/SadArray.h
-ohce ../cutils/src/Vector/Vector.c.ohce src/SadArray.sad src/SadArray.c
-
-ohce ../cutils/src/Dict/Dict.h.ohce src/SadDict.sad src/SadDict.h
-ohce ../cutils/src/Dict/Dict.c.ohce src/SadDict.sad src/SadDict.c
